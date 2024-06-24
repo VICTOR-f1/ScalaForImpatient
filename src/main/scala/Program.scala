@@ -7,7 +7,7 @@ object Program extends App {
 class Chapter1 {
 
   def exercise6(): Unit = {
-    println(BigInt(2).pow(1024))
+    println(BigInt(2).pow(1025))
   }
 
 }
