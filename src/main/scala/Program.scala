@@ -30,18 +30,35 @@ object Program extends App {
   //  objChapter4.exercise4()
   val objChapter5 = new Chapter5()
 
-  // упражнение 2
-  val time1 = objChapter5.Time(1, 5)
-  val time2 = objChapter5.Time(21, 5)
-  println(time1.before(time2))
+  //  // упражнение 2 глава 5
+  //  val time1 = objChapter5.Time(1, 5)
+  //  val time2 = objChapter5.Time(21, 5)
+  //  println(time1.before(time2))
+  //
+  //  // упражнение 3 глава 5
+  //  val time2_1 = objChapter5.Time2(1, 5)
+  //  val time2_2 = objChapter5.Time2(21, 5)
+  //  println(time2_1.before(time2_2))
+  //
+  //  // упражнение 4 глава 5
+  //  val objPerson = objChapter5.Person(-10)
 
-  // упражнение 3
-  val time2_1 = objChapter5.Time2(1, 5)
-  val time2_2 = objChapter5.Time2(21, 5)
-  println(time2_1.before(time2_2))
+  val objChapter6 = new Chapter6()
 
-  // упражнение 4
-  val objPerson = objChapter5.Person(-10)
+  // упражнение 2 глава 6
+  var objUnitConversion: objChapter6.UnitConversion = objChapter6.GallonsToLiters
+  println(objUnitConversion.convert(5))
+
+  objUnitConversion = objChapter6.MilesToKilometers
+  println(objUnitConversion.convert(7))
+
+  objUnitConversion = objChapter6.InchesToCentimeters
+  println(objUnitConversion.convert(70))
+
+  // упражнение 4 и 5 глава 6
+
+  println(objChapter6.CardSuit.toString(1))
+  println(objChapter6.CardSuit.isRed(0))
 }
 
 class Chapter1 {
@@ -268,8 +285,9 @@ class Chapter5 {
   /** В классе Person из раздела 5.1 «Простые классы и методы без параметров»
    * реализуйте главный конструктор, преобразующий отрицательное значение возраста в 0. */
 
-  class Person(var _age:Int) {
+  class Person(var _age: Int) {
     println(_age)
+
     def age_=(newAge: Int): Unit = {
       if (newAge < 0) {
         _age = 0
@@ -279,4 +297,45 @@ class Chapter5 {
       println(_age)
     }
   }
+}
+
+class Chapter6 {
+  /** Реализуйте общий суперкласс UnitConversion и определите объекты
+   * InchesToCentimeters, GallonsToLiters и MilesToKilometers, наследующие его. */
+
+  abstract class UnitConversion {
+    def convert(value: Double): Double
+  }
+
+  object InchesToCentimeters extends UnitConversion {
+    override def convert(num: Double): Double = 1 * num
+  }
+
+  object GallonsToLiters extends UnitConversion {
+    override def convert(num: Double): Double = 2 * num
+  }
+
+  object MilesToKilometers extends UnitConversion {
+    override def convert(num: Double): Double = 3 * num
+  }
+
+  object CardSuit extends Enumeration {
+    val Clubs = Value("♣")
+    val Diamonds = Value("♦")
+    val Hearts = Value("♥")
+    val Spades = Value("♠")
+
+    def isRed(num:Int): Boolean = {
+      num == Diamonds.id || num == Hearts.id
+    }
+    def toString(num:Int): String = {
+      num match {
+        case 1 => "♣"
+        case 2 => "♦"
+        case 3 => "♥"
+        case 4 => "♠"
+      }
+    }
+  }
+
 }
