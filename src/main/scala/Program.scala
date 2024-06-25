@@ -6,6 +6,7 @@ import scala.io.StdIn
 import scala.math.sqrt
 import scala.util.Sorting.quickSort
 import scala.io.Source
+import MyPackeges.Random
 
 object Program extends App {
   val objChapter1 = new Chapter1()
@@ -46,19 +47,24 @@ object Program extends App {
   val objChapter6 = new Chapter6()
 
   // упражнение 2 глава 6
-  var objUnitConversion: objChapter6.UnitConversion = objChapter6.GallonsToLiters
-  println(objUnitConversion.convert(5))
+  //  var objUnitConversion: objChapter6.UnitConversion = objChapter6.GallonsToLiters
+  //  println(objUnitConversion.convert(5))
+  //
+  //  objUnitConversion = objChapter6.MilesToKilometers
+  //  println(objUnitConversion.convert(7))
+  //
+  //  objUnitConversion = objChapter6.InchesToCentimeters
+  //  println(objUnitConversion.convert(70))
+  //
+  //  // упражнение 4 и 5 глава 6
+  //
+  //  println(objChapter6.CardSuit.toString(1))
+  //  println(objChapter6.CardSuit.isRed(0))
 
-  objUnitConversion = objChapter6.MilesToKilometers
-  println(objUnitConversion.convert(7))
-
-  objUnitConversion = objChapter6.InchesToCentimeters
-  println(objUnitConversion.convert(70))
-
-  // упражнение 4 и 5 глава 6
-
-  println(objChapter6.CardSuit.toString(1))
-  println(objChapter6.CardSuit.isRed(0))
+  //Глава 6 упражнение
+  Random.setSeed(10)
+  println(Random.nextInt())
+  println(Random.nextDouble())
 }
 
 class Chapter1 {
