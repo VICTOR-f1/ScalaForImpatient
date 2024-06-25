@@ -1,8 +1,11 @@
+import java.io.{File, PrintWriter}
 import java.net.{MalformedURLException, URL}
+import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn
 import scala.math.sqrt
 import scala.util.Sorting.quickSort
+import scala.io.Source
 
 object Program extends App {
   val objChapter1 = new Chapter1()
@@ -16,10 +19,15 @@ object Program extends App {
   //  objChapter2.exercise6("Unicode")
 
   val objChapter3 = new Chapter3()
-  objChapter3.exercise1(10)
-  objChapter3.exercise2(Array(1, 2, 3, 4, 5))
-  objChapter3.exercise3(Array(2, 1, 4, 3, 5))
-  objChapter3.exercise4(Array(0, 1, 0, -3, 5))
+  //  objChapter3.exercise1(10)
+  //  objChapter3.exercise2(Array(1, 2, 3, 4, 5))
+  //  objChapter3.exercise3(Array(2, 1, 4, 3, 5))
+  //  objChapter3.exercise4(Array(0, 1, 0, -3, 5))
+
+  val objChapter4 = new Chapter4()
+  objChapter4.exercise2()
+  objChapter4.exercise3()
+  objChapter4.exercise4()
 
 }
 
@@ -153,5 +161,45 @@ class Chapter3 {
       }
     }
     println(result.mkString(" "))
+  }
+}
+
+class Chapter4 {
+  /**
+   * Напишите программу, читающую слова из файла. Используйте изменяемый ассоциативный массив
+   * для подсчета вхождений каждого слова. Для чтения слов используйте java.util. Scanner:
+   * * Как получить первый символ строки в языке Scala? А последний символ?
+   * В конце выведите все слова и их счетчики.
+   */
+  def exercise2(): Unit = {
+    val pair = new mutable.HashMap[String, Int]
+    val bufferedSource = scala.io.Source.fromFile("myfile.txt")
+    for (lines <- bufferedSource.getLines()) {
+      lines.split("\\W+").foreach(w => pair(w) = pair.getOrElse(w, 0) + 1)
+    }
+    bufferedSource.close()
+    pair.foreach(println)
+  }
+
+  /**
+   *  Выполните предыдущее упражнение, используя неизменяемый ассоциативный массив
+   */
+  def exercise3(): Unit = {
+    val bufferedSource = scala.io.Source.fromFile("myfile.txt")
+    val words = bufferedSource.mkString.split("\\W+")
+    val wordCounts = (for (w <- words.distinct) yield (w, words.count(_ == w))).toMap
+    bufferedSource.close()
+    wordCounts.foreach(println)
+  }
+
+  /**
+   *Выполните предыдущее упражнение, используя сортированный ассоциативный массив, чтобы слова выводились в отсортированном порядке.
+   */
+  def exercise4(): Unit = {
+    val bufferedSource = scala.io.Source.fromFile("myfile.txt")
+    val words = bufferedSource.mkString.split("\\W+")
+    val wordCounts = (for (w <- words.distinct) yield (w, words.count(_ == w))).toMap
+    bufferedSource.close()
+    wordCounts.foreach(println)
   }
 }
