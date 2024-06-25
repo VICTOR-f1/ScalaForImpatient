@@ -25,13 +25,27 @@ object Program extends App {
   //  objChapter3.exercise4(Array(0, 1, 0, -3, 5))
 
   val objChapter4 = new Chapter4()
-  objChapter4.exercise2()
-  objChapter4.exercise3()
-  objChapter4.exercise4()
+  //  objChapter4.exercise2()
+  //  objChapter4.exercise3()
+  //  objChapter4.exercise4()
+  val objChapter5 = new Chapter5()
 
+  // упражнение 2
+  val time1 = objChapter5.Time(1, 5)
+  val time2 = objChapter5.Time(21, 5)
+  println(time1.before(time2))
+
+  // упражнение 3
+  val time2_1 = objChapter5.Time2(1, 5)
+  val time2_2 = objChapter5.Time2(21, 5)
+  println(time2_1.before(time2_2))
+
+  // упражнение 4
+  val objPerson = objChapter5.Person(-10)
 }
 
 class Chapter1 {
+
   /**
    * Используя число типа BigInt, вычислите 21024
    */
@@ -182,7 +196,7 @@ class Chapter4 {
   }
 
   /**
-   *  Выполните предыдущее упражнение, используя неизменяемый ассоциативный массив
+   * Выполните предыдущее упражнение, используя неизменяемый ассоциативный массив
    */
   def exercise3(): Unit = {
     val bufferedSource = scala.io.Source.fromFile("myfile.txt")
@@ -193,7 +207,7 @@ class Chapter4 {
   }
 
   /**
-   *Выполните предыдущее упражнение, используя сортированный ассоциативный массив, чтобы слова выводились в отсортированном порядке.
+   * Выполните предыдущее упражнение, используя сортированный ассоциативный массив, чтобы слова выводились в отсортированном порядке.
    */
   def exercise4(): Unit = {
     val bufferedSource = scala.io.Source.fromFile("myfile.txt")
@@ -201,5 +215,68 @@ class Chapter4 {
     val wordCounts = (for (w <- words.distinct) yield (w, words.count(_ == w))).toMap
     bufferedSource.close()
     wordCounts.foreach(println)
+  }
+}
+
+class Chapter5 {
+  /** Напишите класс BankAccount с методами deposit и withdraw
+   * и свойством balance, доступным только для чтения */
+  class BankAccount {
+    val balance = 0
+
+    def deposit(): Unit = {
+    }
+
+    def withdraw(): Unit = {
+    }
+  }
+
+  /** Напишите класс Time со свойствами hours и minutes, доступными только для чтения,
+   * и методом before(other: Time): Boolean, который проверяет, предшествует ли время this времени other.
+   * Объект Time должен конструироваться как new Time(hrs, min), где hrs – время в 24-часовом формате. */
+  class Time(val hours: Int, val minutes: Int) {
+    def before(other: Time): Boolean = {
+      if (hours < other.hours) {
+        true
+      }
+      else if (hours == other.hours && minutes < other.minutes) {
+        true
+      }
+      else {
+        false
+      }
+    }
+  }
+
+  /** Перепишите класс Time из предыдущего упражнения, чтобы внутри время
+   * было представлено количеством минут, прошедших с начала суток (между 0 и 24×60 – 1).
+   * Общедоступный интерфейс при этом не должен измениться.
+   * То есть эти изменения не должны оказывать влияния на клиентский код */
+  class Time2(val hours: Int, val minutes: Int) {
+    var timeMinutes: Int = hours * minutes
+
+    def before(other: Time2): Boolean = {
+      if (timeMinutes < other.timeMinutes) {
+        true
+      }
+      else {
+        false
+      }
+    }
+  }
+
+  /** В классе Person из раздела 5.1 «Простые классы и методы без параметров»
+   * реализуйте главный конструктор, преобразующий отрицательное значение возраста в 0. */
+
+  class Person(var _age:Int) {
+    println(_age)
+    def age_=(newAge: Int): Unit = {
+      if (newAge < 0) {
+        _age = 0
+      } else {
+        _age = newAge
+      }
+      println(_age)
+    }
   }
 }
