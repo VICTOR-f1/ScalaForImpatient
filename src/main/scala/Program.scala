@@ -3,11 +3,12 @@ import java.net.{MalformedURLException, URL}
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.io.StdIn
-import scala.math.sqrt
+import scala.math.{abs, sqrt}
 import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
 
+import scala.sys.process.*
 import java.nio.file.{Files, Paths}
 import scala.::
 
@@ -32,6 +33,7 @@ object Program extends App {
   //  objChapter4.exercise2()
   //  objChapter4.exercise3()
   //  objChapter4.exercise4()
+
   val objChapter5 = new Chapter5()
 
   //  // упражнение 2 глава 5
@@ -107,11 +109,20 @@ object Program extends App {
   //  println(bundle.description)
 
   val objChapter9 = new Chapter9()
-  objChapter9.exercise1()
-  objChapter9.exercise3()
-  objChapter9.exercise5()
+  //  objChapter9.exercise1()
+  //  objChapter9.exercise3()
+  //  objChapter9.exercise5()
 
-
+  //  val objChapter11 = new Chapter11()
+  //
+  //  val fraction1 = new objChapter11.Fraction(15, -6)
+  //  val fraction2 = new objChapter11.Fraction(2, 3)
+  //
+  //  println(fraction1)
+  //  println(fraction1 + fraction2)
+  //  println(fraction1 - fraction2)
+  //  println(fraction1 * fraction2)
+  //  println(fraction1 / fraction2)
 }
 
 class Chapter1 {
@@ -289,7 +300,8 @@ class Chapter4 {
 }
 
 class Chapter5 {
-  /** Напишите класс BankAccount с методами deposit и withdraw
+  /**
+   * Напишите класс BankAccount с методами deposit и withdraw
    * и свойством balance, доступным только для чтения */
   class BankAccount {
     val balance = 0
@@ -301,7 +313,8 @@ class Chapter5 {
     }
   }
 
-  /** Напишите класс Time со свойствами hours и minutes, доступными только для чтения,
+  /**
+   * Напишите класс Time со свойствами hours и minutes, доступными только для чтения,
    * и методом before(other: Time): Boolean, который проверяет, предшествует ли время this времени other.
    * Объект Time должен конструироваться как new Time(hrs, min), где hrs – время в 24-часовом формате. */
   class Time(val hours: Int, val minutes: Int) {
@@ -318,7 +331,8 @@ class Chapter5 {
     }
   }
 
-  /** Перепишите класс Time из предыдущего упражнения, чтобы внутри время
+  /**
+   * Перепишите класс Time из предыдущего упражнения, чтобы внутри время
    * было представлено количеством минут, прошедших с начала суток (между 0 и 24×60 – 1).
    * Общедоступный интерфейс при этом не должен измениться.
    * То есть эти изменения не должны оказывать влияния на клиентский код */
@@ -335,7 +349,8 @@ class Chapter5 {
     }
   }
 
-  /** В классе Person из раздела 5.1 «Простые классы и методы без параметров»
+  /**
+   * В классе Person из раздела 5.1 «Простые классы и методы без параметров»
    * реализуйте главный конструктор, преобразующий отрицательное значение возраста в 0. */
   class Person(var _age: Int) {
     println(_age)
@@ -352,8 +367,10 @@ class Chapter5 {
 }
 
 class Chapter6 {
-  /** Реализуйте общий суперкласс UnitConversion и определите объекты
-   * InchesToCentimeters, GallonsToLiters и MilesToKilometers, наследующие его. */
+  /**
+   * Реализуйте общий суперкласс UnitConversion и определите объекты
+   * InchesToCentimeters, GallonsToLiters и MilesToKilometers, наследующие его.
+   * */
   abstract class UnitConversion {
     def convert(value: Double): Double
   }
@@ -392,7 +409,8 @@ class Chapter6 {
 }
 
 class Chapter8 {
-  /** Определите класс CheckingAccount, наследующий класс BankAccount,
+  /**
+   * Определите класс CheckingAccount, наследующий класс BankAccount,
    * который взимает $1 комиссионных за каждую операцию пополнения или списания.
    */
   class BankAccount(initialBalance: Double) {
@@ -427,7 +445,8 @@ class Chapter8 {
     }
   }
 
-  /** Определите класс SavingsAccount, наследующий класс BankAccount
+  /**
+   * Определите класс SavingsAccount, наследующий класс BankAccount
    * из предыдущего упражнения, который начисляет проценты каждый месяц
    * (вызовом метода earnMonthlyInterest) и позволяет бесплатно выполнять три операции зачисления
    * или списания каждый месяц. Метод earnMonthlyInterest должен сбрасывать счетчик транзакций
@@ -499,7 +518,8 @@ class Chapter8 {
 }
 
 class Chapter9 {
-  /** Напишите на языке Scala код, который размещает строки в файле в
+  /**
+   * Напишите на языке Scala код, который размещает строки в файле в
    * обратном порядке (последнюю делает первой и т. д.)
    * */
   def exercise1() = {
@@ -512,7 +532,8 @@ class Chapter9 {
     out.close()
   }
 
-  /** Напишите фрагмент кода на Scala, который читает файл и выводит в консоль все слова,
+  /**
+   * Напишите фрагмент кода на Scala, который читает файл и выводит в консоль все слова,
    * содержащие 12 или более символов. Дополнительные баллы начисляются тем, кто сможет сделать
    * это в одной строке кода.
    */
@@ -523,7 +544,8 @@ class Chapter9 {
     println(count.mkString(" "))
   }
 
-  /** Напишите программу на Scala, которая записывает степени двойки и их обратные величины
+  /**
+   * Напишите программу на Scala, которая записывает степени двойки и их обратные величины
    * в файл с экспонентой от 0 до 20. Расположите числа в столбцах:
    */
   def exercise5() = {
@@ -531,11 +553,78 @@ class Chapter9 {
 
     for (i <- 0 until 20) {
       if (i % 2 == 0) {
-        val exponent:Double= 1.0/i
+        val exponent: Double = 1.0 / i
         out.println(i + "   " + exponent)
       }
     }
     out.close()
 
+  }
+}
+
+
+class Chapter11 {
+  /**
+   * Реализуйте класс Fraction с операциями + - * /. Реализуйте нормализацию
+   * рациональных чисел, например чтобы число 15/–6 превращалось в –5/3, 
+   * а также деление на наибольший общий делитель, как показано ниже:
+   * */
+  class Fraction(n: Int, d: Int) {
+    private val num: Int =
+      if (d == 0) {
+        1
+      }
+      else {
+        n * sign(d) / gcd(n, d)
+      }
+
+    private val den: Int =
+      if (d == 0) {
+        0
+      }
+      else {
+        d * sign(d) / gcd(n, d)
+      }
+
+    override def toString: String = s"$num/$den"
+
+    private def sign(a: Int): Int =
+      if (a > 0) {
+        1
+      }
+      else if (a < 0) {
+        -1
+      }
+      else {
+        0
+      }
+
+    private def gcd(a: Int, b: Int): Int =
+      if (b == 0) {
+        abs(a)
+      }
+      else {
+        gcd(b, a % b)
+      }
+
+    def +(other: Fraction): Fraction = {
+      val commonDen = den * other.den
+      val newNum = num * other.den + other.num * den
+      Fraction(newNum, commonDen)
+    }
+
+    def -(other: Fraction): Fraction = {
+      val commonDen = den * other.den
+      val newNum = num * other.den - other.num * den
+      Fraction(newNum, commonDen)
+    }
+
+    def *(other: Fraction): Fraction = {
+      Fraction(num * other.num, den * other.den)
+    }
+
+    def /(other: Fraction): Fraction = {
+      Fraction(num * other.den, den * other.num)
+    }
   }
 }
