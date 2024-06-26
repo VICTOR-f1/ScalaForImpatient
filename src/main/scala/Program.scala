@@ -527,11 +527,15 @@ class Chapter9 {
    * в файл с экспонентой от 0 до 20. Расположите числа в столбцах:
    */
   def exercise5() = {
-    for (i <- 2 until Short.MaxValue) {
+    val out = new PrintWriter("exercise5Chapter9.txt")
+
+    for (i <- 20 until Short.MaxValue) {
       if (i % 2 == 0) {
         val exponent:Double= 1.0/i
-        println(i + "   " + exponent )
+        out.println(i + "   " + exponent )
       }
     }
+    out.close()
+
   }
 }
