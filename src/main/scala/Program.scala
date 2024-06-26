@@ -8,6 +8,7 @@ import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
 
+import java.nio.file.{Files, Paths}
 import scala.::
 
 object Program extends App {
@@ -71,39 +72,46 @@ object Program extends App {
 
   val objChapter8 = new Chapter8()
 
-  //  упражнение 1 Глава 8
-  val checkingAccount = new objChapter8.CheckingAccount(20)
-  println(checkingAccount.currentBalance)
+  //  //  упражнение 1 Глава 8
+  //  val checkingAccount = new objChapter8.CheckingAccount(20)
+  //  println(checkingAccount.currentBalance)
+  //
+  //  checkingAccount.deposit(10)
+  //  println(checkingAccount.currentBalance)
+  //
+  //  checkingAccount.withdraw(20)
+  //  println(checkingAccount.currentBalance)
+  //
+  //  //  упражнение 2 Глава 8
+  //
+  //  val savingAccount = new objChapter8.SavingsAccount(20)
+  //  println(checkingAccount.currentBalance)
+  //
+  //  savingAccount.deposit(10)
+  //  println(savingAccount.currentBalance)
+  //
+  //  savingAccount.withdraw(20)
+  //  println(savingAccount.currentBalance)
+  //
+  //  savingAccount.earnMonthlyInterest(20)
+  //  println(savingAccount.currentBalance)
+  //
+  //  val item1 = new objChapter8.SimpleItem(10.0, "Item 1")
+  //  val item2 = new objChapter8.SimpleItem(20.0, "Item 2")
+  //
+  //  val bundle = new objChapter8.Bundle
+  //  bundle.addItem(item1)
+  //  bundle.addItem(item2)
+  //
+  //  println(bundle.price)
+  //  println(bundle.description)
 
-  checkingAccount.deposit(10)
-  println(checkingAccount.currentBalance)
+  val objChapter9 = new Chapter9()
+  objChapter9.exercise1()
+  objChapter9.exercise3()
+  objChapter9.exercise5()
 
-  checkingAccount.withdraw(20)
-  println(checkingAccount.currentBalance)
 
-  //  упражнение 2 Глава 8
-
-  val savingAccount = new objChapter8.SavingsAccount(20)
-  println(checkingAccount.currentBalance)
-
-  savingAccount.deposit(10)
-  println(savingAccount.currentBalance)
-
-  savingAccount.withdraw(20)
-  println(savingAccount.currentBalance)
-
-  savingAccount.earnMonthlyInterest(20)
-  println(savingAccount.currentBalance)
-
-  val item1 = new objChapter8.SimpleItem(10.0, "Item 1")
-  val item2 = new objChapter8.SimpleItem(20.0, "Item 2")
-
-  val bundle = new objChapter8.Bundle
-  bundle.addItem(item1)
-  bundle.addItem(item2)
-
-  println(bundle.price)
-  println(bundle.description)
 }
 
 class Chapter1 {
@@ -459,6 +467,14 @@ class Chapter8 {
     }
   }
 
+  /**
+   * Определите абстрактный класс элемента Item с методами price и description.
+   * Определите подкласс простого элемента SimpleItem, представляющий элемент,
+   * цена и описание которого определяются в конструкторе. Используйте тот факт, что
+   * объявление val может переопределять def. Определите класс Bundle – пакет элементов,
+   * содержащий другие элементы. Его цена должна определяться как сумма цен элементов в пакете.
+   * Реализуйте также механизм добавления элементов в пакет и соответствующий метод description.
+   */
   abstract class Item {
     def price: Double
 
@@ -473,12 +489,49 @@ class Chapter8 {
     private var items: ArrayBuffer[Item] = new ArrayBuffer[Item]()
 
     def addItem(item: Item): Unit = {
-      items += item 
+      items += item
     }
 
     override def price: Double = items.map(_.price).sum
 
     override def description: String = items.map(_.description).mkString(", ")
   }
+}
 
+class Chapter9 {
+  /** Напишите на языке Scala код, который размещает строки в файле в
+   * обратном порядке (последнюю делает первой и т. д.)
+   * */
+  def exercise1() = {
+    val lines = Source.fromFile("myfile.txt")
+    val textFile = lines.mkString.split("\\s+").reverse
+    lines.close()
+
+    val out = new PrintWriter("myfile.txt")
+    for (text <- textFile) out.println(text)
+    out.close()
+  }
+
+  /** Напишите фрагмент кода на Scala, который читает файл и выводит в консоль все слова,
+   * содержащие 12 или более символов. Дополнительные баллы начисляются тем, кто сможет сделать
+   * это в одной строке кода.
+   */
+  def exercise3() = {
+    val lines = Source.fromFile("myfile.txt")
+    val count = lines.mkString.split("\\s+").filter(x => x.length > 12)
+    lines.close()
+    println(count.mkString(" "))
+  }
+
+  /** Напишите программу на Scala, которая записывает степени двойки и их обратные величины
+   * в файл с экспонентой от 0 до 20. Расположите числа в столбцах:
+   */
+  def exercise5() = {
+    for (i <- 2 until Short.MaxValue) {
+      if (i % 2 == 0) {
+        val exponent:Double= 1.0/i
+        println(i + "   " + exponent )
+      }
+    }
+  }
 }
