@@ -8,6 +8,8 @@ import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
 
+import scala.::
+
 object Program extends App {
   val objChapter1 = new Chapter1()
   //  objChapter1.exercise6()
@@ -61,10 +63,47 @@ object Program extends App {
   //  println(objChapter6.CardSuit.toString(1))
   //  println(objChapter6.CardSuit.isRed(0))
 
-  //Глава 6 упражнение
-  Random.setSeed(10)
-  println(Random.nextInt())
-  println(Random.nextDouble())
+  //  // упражнение 3 Глава 7
+  //
+  //  Random.setSeed(10)
+  //  println(Random.nextInt())
+  //  println(Random.nextDouble())
+
+  val objChapter8 = new Chapter8()
+
+  //  упражнение 1 Глава 8
+  val checkingAccount = new objChapter8.CheckingAccount(20)
+  println(checkingAccount.currentBalance)
+
+  checkingAccount.deposit(10)
+  println(checkingAccount.currentBalance)
+
+  checkingAccount.withdraw(20)
+  println(checkingAccount.currentBalance)
+
+  //  упражнение 2 Глава 8
+
+  val savingAccount = new objChapter8.SavingsAccount(20)
+  println(checkingAccount.currentBalance)
+
+  savingAccount.deposit(10)
+  println(savingAccount.currentBalance)
+
+  savingAccount.withdraw(20)
+  println(savingAccount.currentBalance)
+
+  savingAccount.earnMonthlyInterest(20)
+  println(savingAccount.currentBalance)
+
+  val item1 = new objChapter8.SimpleItem(10.0, "Item 1")
+  val item2 = new objChapter8.SimpleItem(20.0, "Item 2")
+
+  val bundle = new objChapter8.Bundle
+  bundle.addItem(item1)
+  bundle.addItem(item2)
+
+  println(bundle.price)
+  println(bundle.description)
 }
 
 class Chapter1 {
@@ -290,7 +329,6 @@ class Chapter5 {
 
   /** В классе Person из раздела 5.1 «Простые классы и методы без параметров»
    * реализуйте главный конструктор, преобразующий отрицательное значение возраста в 0. */
-
   class Person(var _age: Int) {
     println(_age)
 
@@ -308,7 +346,6 @@ class Chapter5 {
 class Chapter6 {
   /** Реализуйте общий суперкласс UnitConversion и определите объекты
    * InchesToCentimeters, GallonsToLiters и MilesToKilometers, наследующие его. */
-
   abstract class UnitConversion {
     def convert(value: Double): Double
   }
@@ -331,10 +368,11 @@ class Chapter6 {
     val Hearts = Value("♥")
     val Spades = Value("♠")
 
-    def isRed(num:Int): Boolean = {
+    def isRed(num: Int): Boolean = {
       num == Diamonds.id || num == Hearts.id
     }
-    def toString(num:Int): String = {
+
+    def toString(num: Int): String = {
       num match {
         case 1 => "♣"
         case 2 => "♦"
@@ -342,6 +380,105 @@ class Chapter6 {
         case 4 => "♠"
       }
     }
+  }
+}
+
+class Chapter8 {
+  /** Определите класс CheckingAccount, наследующий класс BankAccount,
+   * который взимает $1 комиссионных за каждую операцию пополнения или списания.
+   */
+  class BankAccount(initialBalance: Double) {
+    private var balance = initialBalance
+
+    def currentBalance = balance
+
+    def deposit(amount: Double) = {
+      balance += amount
+      balance
+    }
+
+    def withdraw(amount: Double) = {
+      balance -= amount
+      balance
+    }
+  }
+
+  class CheckingAccount(initialBalance: Double) extends BankAccount(initialBalance) {
+    private var balance = initialBalance
+
+    override def currentBalance = balance
+
+    override def deposit(amount: Double) = {
+      balance += amount - 1
+      balance
+    }
+
+    override def withdraw(amount: Double) = {
+      balance -= amount - 1
+      balance
+    }
+  }
+
+  /** Определите класс SavingsAccount, наследующий класс BankAccount
+   * из предыдущего упражнения, который начисляет проценты каждый месяц
+   * (вызовом метода earnMonthlyInterest) и позволяет бесплатно выполнять три операции зачисления
+   * или списания каждый месяц. Метод earnMonthlyInterest должен сбрасывать счетчик транзакций
+   */
+  class SavingsAccount(initialBalance: Double) extends CheckingAccount(initialBalance) {
+    private var balance = initialBalance
+    private var transactionCount = 0
+
+    override def currentBalance = balance
+
+    override def deposit(amount: Double) = {
+      if (transactionCount <= 3) {
+        balance += amount - 1
+      }
+      else {
+        balance += amount
+      }
+      transactionCount += 1
+      balance
+    }
+
+    override def withdraw(amount: Double) = {
+      if (transactionCount <= 3) {
+        balance -= amount - 1
+      }
+      else {
+        balance -= amount
+      }
+      transactionCount += 1
+      balance
+    }
+
+    def earnMonthlyInterest(percent: Double) = {
+      balance *= percent
+      transactionCount = 0
+      balance
+    }
+  }
+
+  abstract class Item {
+    def price: Double
+
+    def description: String
+  }
+
+  class SimpleItem(override val price: Double, override val description: String) extends Item {
+
+  }
+
+  class Bundle extends Item {
+    private var items: ArrayBuffer[Item] = new ArrayBuffer[Item]()
+
+    def addItem(item: Item): Unit = {
+      items += item 
+    }
+
+    override def price: Double = items.map(_.price).sum
+
+    override def description: String = items.map(_.description).mkString(", ")
   }
 
 }
