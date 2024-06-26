@@ -529,10 +529,10 @@ class Chapter9 {
   def exercise5() = {
     val out = new PrintWriter("exercise5Chapter9.txt")
 
-    for (i <- 20 until Short.MaxValue) {
+    for (i <- 0 until 20) {
       if (i % 2 == 0) {
         val exponent:Double= 1.0/i
-        out.println(i + "   " + exponent )
+        out.println(i + "   " + exponent)
       }
     }
     out.close()
