@@ -113,7 +113,7 @@ object Program extends App {
   //  objChapter9.exercise3()
   //  objChapter9.exercise5()
 
-  //  val objChapter11 = new Chapter11()
+  val objChapter11 = new Chapter11()
   //
   //  val fraction1 = new objChapter11.Fraction(15, -6)
   //  val fraction2 = new objChapter11.Fraction(2, 3)
@@ -123,6 +123,13 @@ object Program extends App {
   //  println(fraction1 - fraction2)
   //  println(fraction1 * fraction2)
   //  println(fraction1 / fraction2)
+
+  val objChapter12 = new Chapter12()
+  val result = objChapter12.exercise1(x => x * x, -5, 5)
+  println(result)
+  objChapter12.exercise2()
+  println(objChapter12.exercise3(3))
+
 }
 
 class Chapter1 {
@@ -625,6 +632,41 @@ class Chapter11 {
 
     def /(other: Fraction): Fraction = {
       Fraction(num * other.den, den * other.num)
+    }
+  }
+}
+
+/**
+ * Напишите функцию values(fun: (Int) => Int, low: Int, high: Int),
+ * возвращающую коллекцию из значений в указанном диапазоне. Например,
+ * вызов values(x => x * x, -5, 5) должен вернуть коллекцию пар (-5, 25),
+ * (-4, 16), (-3, 9), ..., (5, 25).
+ * */
+class Chapter12 {
+  def exercise1(fun: Int => Int, low: Int, high: Int) = {
+    for (i <- low to high) yield (i, fun(i))
+  }
+
+  /**
+   * Как получить наибольший элемент массива с помощью метода
+   * reduceLeft?
+   * */
+  def exercise2() = {
+    val array = Array(3, 7, 2, 9, 1, 5)
+    val maxElement = array.reduceLeft((x, max) => if (x < max) max else x)
+
+    println(maxElement)
+  }
+
+  /**
+   * Реализуйте функцию вычисления факториала с помощью методов
+   * to и reduceLeft без применения цикла или рекурсии.
+   * */
+  def exercise3(num: Int) = {
+    if (num == 0) {
+      1
+    } else {
+      (1 to num).reduceLeft((x,res)=>x*res)
     }
   }
 }
