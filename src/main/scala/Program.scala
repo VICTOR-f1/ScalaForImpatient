@@ -125,10 +125,14 @@ object Program extends App {
   //  println(fraction1 / fraction2)
 
   val objChapter12 = new Chapter12()
-  val result = objChapter12.exercise1(x => x * x, -5, 5)
-  println(result)
-  objChapter12.exercise2()
-  println(objChapter12.exercise3(3))
+  //  val result = objChapter12.exercise1(x => x * x, -5, 5)
+  //  println(result)
+  //  objChapter12.exercise2()
+  //  println(objChapter12.exercise3(3))
+
+  val objChapter13 = new Chapter13()
+  println(objChapter13.exercise1("Mississippi").mkString(" || "))
+  println(objChapter13.exercise4(Array("Tom","Fred", "Harry")).mkString(" || "))
 
 }
 
@@ -666,7 +670,33 @@ class Chapter12 {
     if (num == 0) {
       1
     } else {
-      (1 to num).reduceLeft((x,res)=>x*res)
+      (1 to num).reduceLeft((x, res) => x * res)
     }
+  }
+}
+
+/**
+ * Напишите функцию, возвращающую для указанной строки отображение индексов всех символов.
+ * Например, вызов exercise1("Mississippi") должен вернуть ассоциативный массив, 230 Коллекции
+ * связывающий 'M' со множеством {0}, 'i' – со множеством {1, 4, 7, 10} и т. д.
+ * Используйте изменяемый ассоциативный массив, отображающий символы в изменяемые множества
+ */
+class Chapter13 {
+  def exercise1(str: String) = {
+    val pair = mutable.Map[Char, ArrayBuffer[Int]]()
+    for (i <- str.indices) pair(str(i))=pair.getOrElse(str(i), ArrayBuffer())+=i
+    pair
+  }
+
+  /**
+   * Напишите функцию, принимающую коллекцию строк и ассоциативный массив.
+   * Она олжна возвращать коллекцию целых чисел, значения которых соответствуют строкам
+   * в ассоциативном массиве, повторяющимся в исходной коллекции.
+   * Например, для Array("Tom", "Fred", "Harry") и Map("Tom" -> 3, "Dick" -> 4, "Harry" -> 5)
+   */
+  def exercise4(arr: Array[String]) = {
+    val pair = mutable.Map[String, Int]()
+    for (i <- arr.indices) pair(arr(i)) = pair.getOrElse(arr(i), 0) + arr(i).length
+    pair
   }
 }
