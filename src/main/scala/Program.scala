@@ -141,9 +141,14 @@ object Program extends App {
 
   val objChapter15 = new Chapter15()
 
-  println(objChapter15.exercise4(1, 2,3,4,5))
-  println(objChapter15.exercise5("myfile.txt"))
+  //  println(objChapter15.exercise4(1, 2,3,4,5))
+  //  println(objChapter15.exercise5("myfile.txt"))
 
+  val objChapter16 = new Chapter16()
+
+  val map = Map("A" -> "1", "B" -> "2")
+  println(objChapter16.exercise7(map))
+  println(objChapter16.exercise8("<dl><dt>A</dt><dd>1</dd><dt>B</dt><dd>2</dd></dl>").mkString(" "))
 }
 
 class Chapter1 {
@@ -687,7 +692,7 @@ class Chapter12 {
 }
 
 
-class Chapter13{
+class Chapter13 {
 
   /**
    * Напишите функцию, возвращающую для указанной строки отображение индексов всех символов.
@@ -747,10 +752,44 @@ class Chapter15 {
   /**
    * Напишите метод, возвращающий строковое значение с содержимым текстового файла.
    */
-  def exercise5(fileName:String) = {
+  def exercise5(fileName: String) = {
     val lines = Source.fromFile(s"$fileName")
     val textFile = lines.mkString.split("\\s+").mkString(" ")
     lines.close()
     textFile
   }
+}
+
+
+class Chapter16 {
+  /**
+   * Напишите функцию, принимающую параметр типа Map[String, String] и возвращающую элемент
+   * dl с элементом dt – для каждого ключа и dd – для каждого значения. Например, для
+   * Map("A" -> "1", "B" -> "2") функция должна вернуть
+   * <dl><dt>A</dt><dd>1</dd><dt>B</dt><dd>2</dd></dl>
+   */
+  def exercise7(pair: Map[String, String]): String = {
+    val result = for ((x, y) <- pair) yield s"<dt>$x</dt><dd>$y</dd>"
+    s"<dl>${result.mkString}</dl>"
+  }
+
+  /**
+   * Напишите функцию, принимающую элемент dl и превращающую его в Map[String, String].
+   * Эта функция является полной противоположностью функции из предыдущего упражнения
+   */
+  def exercise8(str: String): Map[Char, Int] = {
+    val map = mutable.Map[Char, Int]()
+    var current = ' '
+    for (ch <- str) {
+      if (ch.isUpper) {
+        map.addOne(ch, 1)
+        current = ch
+      }
+      if (ch.isDigit) {
+        map(current) = ch.asDigit
+      }
+    }
+    map.toMap
+  }
+
 }
