@@ -115,14 +115,14 @@ object Program extends App {
 
   val objChapter11 = new Chapter11()
   //
-  //  val fraction1 = new objChapter11.Fraction(15, -6)
-  //  val fraction2 = new objChapter11.Fraction(2, 3)
+  //    val fraction1 = new objChapter11.Fraction(15, -6)
+  //    val fraction2 = new objChapter11.Fraction(2, 3)
   //
-  //  println(fraction1)
-  //  println(fraction1 + fraction2)
-  //  println(fraction1 - fraction2)
-  //  println(fraction1 * fraction2)
-  //  println(fraction1 / fraction2)
+  //    println(fraction1)
+  //    println(fraction1 + fraction2)
+  //    println(fraction1 - fraction2)
+  //    println(fraction1 * fraction2)
+  //    println(fraction1 / fraction2)
 
   val objChapter12 = new Chapter12()
   //  val result = objChapter12.exercise1(x => x * x, -5, 5)
@@ -136,9 +136,13 @@ object Program extends App {
 
   val objChapter14 = new Chapter14()
 
-  println(objChapter14.exercise2(1, 2))
-  println(objChapter14.exercise3(Array(1,2,3,4)).mkString(" "))
+  //  println(objChapter14.exercise2(1, 2))
+  //  println(objChapter14.exercise3(Array(1, 2, 3, 4)).mkString(" "))
 
+  val objChapter15 = new Chapter15()
+
+  println(objChapter15.exercise4(1, 2,3,4,5))
+  println(objChapter15.exercise5("myfile.txt"))
 
 }
 
@@ -646,13 +650,14 @@ class Chapter11 {
   }
 }
 
-/**
- * Напишите функцию values(fun: (Int) => Int, low: Int, high: Int),
- * возвращающую коллекцию из значений в указанном диапазоне. Например,
- * вызов values(x => x * x, -5, 5) должен вернуть коллекцию пар (-5, 25),
- * (-4, 16), (-3, 9), ..., (5, 25).
- * */
+
 class Chapter12 {
+  /**
+   * Напишите функцию values(fun: (Int) => Int, low: Int, high: Int),
+   * возвращающую коллекцию из значений в указанном диапазоне. Например,
+   * вызов values(x => x * x, -5, 5) должен вернуть коллекцию пар (-5, 25),
+   * (-4, 16), (-3, 9), ..., (5, 25).
+   * */
   def exercise1(fun: Int => Int, low: Int, high: Int) = {
     for (i <- low to high) yield (i, fun(i))
   }
@@ -681,13 +686,15 @@ class Chapter12 {
   }
 }
 
-/**
- * Напишите функцию, возвращающую для указанной строки отображение индексов всех символов.
- * Например, вызов exercise1("Mississippi") должен вернуть ассоциативный массив, 230 Коллекции
- * связывающий 'M' со множеством {0}, 'i' – со множеством {1, 4, 7, 10} и т. д.
- * Используйте изменяемый ассоциативный массив, отображающий символы в изменяемые множества
- */
-class Chapter13 {
+
+class Chapter13{
+
+  /**
+   * Напишите функцию, возвращающую для указанной строки отображение индексов всех символов.
+   * Например, вызов exercise1("Mississippi") должен вернуть ассоциативный массив, 230 Коллекции
+   * связывающий 'M' со множеством {0}, 'i' – со множеством {1, 4, 7, 10} и т. д.
+   * Используйте изменяемый ассоциативный массив, отображающий символы в изменяемые множества
+   */
   def exercise1(str: String) = {
     val pair = mutable.Map[Char, ArrayBuffer[Int]]()
     for (i <- str.indices) pair(str(i)) = pair.getOrElse(str(i), ArrayBuffer()) += i
@@ -721,7 +728,29 @@ class Chapter14 {
    * два элемента массива, если он имеет длину не меньше дву
    * */
   def exercise3(arr: Array[Int]): Array[Int] = arr match {
-    case Array(a, b,rest*) =>  Array(b,a)++rest
+    case Array(a, b, rest*) => Array(b, a) ++ rest
     case _ => Array(-1)
+  }
+}
+
+class Chapter15 {
+  /**
+   * Напишите метод sum с переменным числом целочисленных аргументов,
+   * возвращающий сумму своих аргументов
+   */
+  def exercise4(nums: Int*) = {
+    var res = 0
+    for (num <- nums) res += num
+    res
+  }
+
+  /**
+   * Напишите метод, возвращающий строковое значение с содержимым текстового файла.
+   */
+  def exercise5(fileName:String) = {
+    val lines = Source.fromFile(s"$fileName")
+    val textFile = lines.mkString.split("\\s+").mkString(" ")
+    lines.close()
+    textFile
   }
 }
