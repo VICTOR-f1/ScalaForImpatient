@@ -131,8 +131,14 @@ object Program extends App {
   //  println(objChapter12.exercise3(3))
 
   val objChapter13 = new Chapter13()
-  println(objChapter13.exercise1("Mississippi").mkString(" || "))
-  println(objChapter13.exercise4(Array("Tom","Fred", "Harry")).mkString(" || "))
+  //  println(objChapter13.exercise1("Mississippi").mkString(" || "))
+  //  println(objChapter13.exercise4(Array("Tom","Fred", "Harry")).mkString(" || "))
+
+  val objChapter14 = new Chapter14()
+
+  println(objChapter14.exercise2(1, 2))
+  println(objChapter14.exercise3(Array(1,2,3,4)).mkString(" "))
+
 
 }
 
@@ -684,7 +690,7 @@ class Chapter12 {
 class Chapter13 {
   def exercise1(str: String) = {
     val pair = mutable.Map[Char, ArrayBuffer[Int]]()
-    for (i <- str.indices) pair(str(i))=pair.getOrElse(str(i), ArrayBuffer())+=i
+    for (i <- str.indices) pair(str(i)) = pair.getOrElse(str(i), ArrayBuffer()) += i
     pair
   }
 
@@ -698,5 +704,24 @@ class Chapter13 {
     val pair = mutable.Map[String, Int]()
     for (i <- arr.indices) pair(arr(i)) = pair.getOrElse(arr(i), 0) + arr(i).length
     pair
+  }
+}
+
+class Chapter14 {
+  /**
+   * Используя сопоставление с образцом, напишите функцию swap, которая принимает пару
+   * целых чисел и возвращает ту же пару, поменяв компоненты местами
+   */
+  def exercise2(firstNum: Int, secondNum: Int): (Int, Int) = firstNum match {
+    case _ => (secondNum, firstNum)
+  }
+
+  /**
+   * Используя сопоставление с образцом, напишите функцию swap, которая меняет местами первые
+   * два элемента массива, если он имеет длину не меньше дву
+   * */
+  def exercise3(arr: Array[Int]): Array[Int] = arr match {
+    case Array(a, b,rest*) =>  Array(b,a)++rest
+    case _ => Array(-1)
   }
 }
