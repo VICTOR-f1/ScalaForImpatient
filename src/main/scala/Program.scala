@@ -8,9 +8,12 @@ import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.sys.process.*
 import java.nio.file.{Files, Paths}
 import scala.::
+import scala.concurrent.Future
+import scala.util.Success
 
 object Program extends App {
   val objChapter1 = new Chapter1()
@@ -146,9 +149,29 @@ object Program extends App {
 
   val objChapter16 = new Chapter16()
 
-  val map = Map("A" -> "1", "B" -> "2")
-  println(objChapter16.exercise7(map))
-  println(objChapter16.exercise8("<dl><dt>A</dt><dd>1</dd><dt>B</dt><dd>2</dd></dl>").mkString(" "))
+  //  val map = Map("A" -> "1", "B" -> "2")
+  //  println(objChapter16.exercise7(map))
+  //  println(objChapter16.exercise8("<dl><dt>A</dt><dd>1</dd><dt>B</dt><dd>2</dd></dl>").mkString(" "))
+
+  val objChapter17 = new Chapter17()
+
+  def addOne(n: Int): Future[Int] = Future {
+    Thread.sleep(50)
+    n + 1
+  }
+
+  def multiplyByTwo(n: Int): Future[Int] = Future {
+    Thread.sleep(100)
+    n * 2
+  }
+
+  val result = objChapter17.exercise2(addOne, multiplyByTwo)(57)
+
+  result.onComplete{
+    case Success(value)=> println(value)
+  }
+
+  Thread.sleep(1000)
 }
 
 class Chapter1 {
@@ -791,5 +814,14 @@ class Chapter16 {
     }
     map.toMap
   }
-
+}
+/**
+ * Напишите функцию doInOrder, принимающую функции f: T => Future[U] и g: U => Future[V] и
+ * возвращающую функцию T => Future[U], которая для заданного значения t в конечном счете
+ * возвращает g(f(t)).
+ */
+class Chapter17{
+  def exercise2[T, U, V](f: T => Future[U], g: U => Future[V]): T => Future[V] = {
+    t => f(t).flatMap(g)
+  }
 }
