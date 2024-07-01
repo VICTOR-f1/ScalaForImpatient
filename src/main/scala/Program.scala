@@ -69,7 +69,7 @@ object Program extends App {
   //  println(objChapter6.CardSuit.toString(1))
   //  println(objChapter6.CardSuit.isRed(0))
 
-  //  // упражнение 3 Глава 7
+  //  // упражнение 3 глава 7
   //
   //  Random.setSeed(10)
   //  println(Random.nextInt())
@@ -77,7 +77,7 @@ object Program extends App {
 
   val objChapter8 = new Chapter8()
 
-  //  //  упражнение 1 Глава 8
+  //  //  упражнение 1 глава 8
   //  val checkingAccount = new objChapter8.CheckingAccount(20)
   //  println(checkingAccount.currentBalance)
   //
@@ -87,7 +87,7 @@ object Program extends App {
   //  checkingAccount.withdraw(20)
   //  println(checkingAccount.currentBalance)
   //
-  //  //  упражнение 2 Глава 8
+  //  //  упражнение 2 глава 8
   //
   //  val savingAccount = new objChapter8.SavingsAccount(20)
   //  println(checkingAccount.currentBalance)
@@ -155,23 +155,43 @@ object Program extends App {
 
   val objChapter17 = new Chapter17()
 
-  def addOne(n: Int): Future[Int] = Future {
-    Thread.sleep(50)
-    n + 1
-  }
+  //  def addOne(n: Int): Future[Int] = Future {
+  //    Thread.sleep(50)
+  //    n + 1
+  //  }
+  //
+  //  def multiplyByTwo(n: Int): Future[Int] = Future {
+  //    Thread.sleep(100)
+  //    n * 2
+  //  }
+  //
+  //  val result = objChapter17.exercise2(addOne, multiplyByTwo)(57)
+  //
+  //  result.onComplete{
+  //    case Success(value)=> println(value)
+  //  }
+  //
+  //  Thread.sleep(1000)
 
-  def multiplyByTwo(n: Int): Future[Int] = Future {
-    Thread.sleep(100)
-    n * 2
-  }
+  val objChapter18 = new Chapter18()
 
-  val result = objChapter17.exercise2(addOne, multiplyByTwo)(57)
+  //  упражнение 1 глава 18
+  val pair1 = objChapter18.Pair(1, "Hello")
+  val pair2 = pair1.swap
 
-  result.onComplete{
-    case Success(value)=> println(value)
-  }
 
-  Thread.sleep(1000)
+  println(pair1.first + " " + pair1.second)
+  println(pair2.first + " " + pair2.second)
+  //  упражнение 3 глава 18
+  val pair3 = pair2.swap2(pair2)
+  println(pair3.first + " " + pair3.second)
+
+  //  упражнение 2 глава 18
+  val pair = new objChapter18.Pair2[Int](1, 2)
+  println(pair.first + " " + pair.second)
+
+  pair.swap()
+  println(pair.first + " " + pair.second)
 }
 
 class Chapter1 {
@@ -815,13 +835,42 @@ class Chapter16 {
     map.toMap
   }
 }
-/**
- * Напишите функцию doInOrder, принимающую функции f: T => Future[U] и g: U => Future[V] и
- * возвращающую функцию T => Future[U], которая для заданного значения t в конечном счете
- * возвращает g(f(t)).
- */
-class Chapter17{
+
+class Chapter17 {
+  /**
+   * Напишите функцию doInOrder, принимающую функции f: T => Future[U] и g: U => Future[V] и
+   * возвращающую функцию T => Future[U], которая для заданного значения t в конечном счете
+   * возвращает g(f(t)).
+   */
   def exercise2[T, U, V](f: T => Future[U], g: U => Future[V]): T => Future[V] = {
     t => f(t).flatMap(g)
+  }
+}
+
+class Chapter18 {
+  /**
+   * Определите неизменяемый класс Pair[T, S] с методом swap, возвращающим новую пару,
+   * где компоненты поменяны местами.
+   */
+  class Pair[T, S](var first: T, var second: S) {
+    def swap: Pair[S, T] = Pair(second, first)
+
+    /**
+     * Для класса Pair[T, S] напишите обобщенный метод swap, который принимает
+     * пару в виде аргумента и возвращает новую пару с компонентами, поменянными местами.
+     */
+    def swap2(pair: Pair[T, S]): Pair[T, S] = Pair(first, second)
+
+  }
+
+  /**
+   * Определите изменяемый класс Pair[T] с методом swap, который меняет компоненты пары местами.
+   */
+  class Pair2[T](var first: T, var second: T) {
+    def swap() = {
+      val temp = first
+      first = second
+      second = temp
+    }
   }
 }
