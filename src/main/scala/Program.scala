@@ -175,27 +175,37 @@ object Program extends App {
 
   val objChapter18 = new Chapter18()
 
-  //  упражнение 1 глава 18
-  val pair1 = objChapter18.Pair(1, "Hello")
-  val pair2 = pair1.swap
+  //  //  упражнение 1 глава 18
+  //  val pair1 = objChapter18.Pair(1, "Hello")
+  //  val pair2 = pair1.swap
+  //
+  //
+  //  println(pair1.first + " " + pair1.second)
+  //  println(pair2.first + " " + pair2.second)
+  //  //  упражнение 3 глава 18
+  //  val pair3 = pair2.swap2(pair2)
+  //  println(pair3.first + " " + pair3.second)
+  //
+  //  //  упражнение 2 глава 18
+  //  val pair = new objChapter18.Pair2[Int](1, 2)
+  //  println(pair.first + " " + pair.second)
+  //
+  //  pair.swap()
+  //  println(pair.first + " " + pair.second)
+
+  val objChapter19 = new Chapter19()
+
+  val bugsy = new objChapter19.Bug()
+  bugsy.move(4).show().move(6).show().turn().move(5).show()
+  println("\n"+bugsy.direction + " " + bugsy.position)
+
+  objChapter19.exercise8((x: Int) => x * x, 3, 6)
 
 
-  println(pair1.first + " " + pair1.second)
-  println(pair2.first + " " + pair2.second)
-  //  упражнение 3 глава 18
-  val pair3 = pair2.swap2(pair2)
-  println(pair3.first + " " + pair3.second)
 
-  //  упражнение 2 глава 18
-  val pair = new objChapter18.Pair2[Int](1, 2)
-  println(pair.first + " " + pair.second)
-
-  pair.swap()
-  println(pair.first + " " + pair.second)
 }
 
 class Chapter1 {
-
   /**
    * Используя число типа BigInt, вычислите 21024
    */
@@ -872,5 +882,46 @@ class Chapter18 {
       first = second
       second = temp
     }
+  }
+}
+
+class Chapter19 {
+  /**
+   * Реализуйте класс Bug, моделирующий жука, перемещающегося по горизонтальной линии.
+   * Метод move перемещает жука в текущем направлении, метод turn изменяет направление на
+   * противоположное, а метод show выводит текущую позицию. Обеспечьте возможность составления
+   * цепочек из вызовов этих методов. Например, цепочка: bugsy.move(4).show().move(6).show().
+   * turn().move(5).show() должна вывести 4 10 5
+   */
+  class Bug {
+    var position: Int = 0
+    var direction: Int = 1
+
+    def move(steps: Int): Bug = {
+      position += steps
+      this
+    }
+
+    def turn(): Bug = {
+      direction = -direction
+      this
+    }
+
+    def show(): Bug = {
+      print(position+" ")
+      this
+    }
+  }
+  /**
+   * Напишите функцию printValues с тремя параметрами: f, from
+   * и to, выводящую все значения f, для входных значений в заданном диапазоне
+   * от from до to. Здесь f должен быть любым объектом с методом apply,
+   * получающим и возвращающим значение типа Int. Например:
+   */
+  def exercise8(f: Int => Int, from: Int, to: Int): Unit = {
+    for (i <- from to to) {
+      print(f(i) + " ")
+    }
+    println()
   }
 }
