@@ -7,13 +7,14 @@ import scala.math.{abs, sqrt}
 import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
-
+import com.sun.jndi.url.rmi.rmiURLContext.Parser
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.sys.process.*
 import java.nio.file.{Files, Paths}
 import scala.::
 import scala.concurrent.Future
 import scala.util.Success
+import scala.util.parsing.combinator.syntactical.StandardTokenParsers
 
 object Program extends App {
   val objChapter1 = new Chapter1()
@@ -118,14 +119,14 @@ object Program extends App {
 
   val objChapter11 = new Chapter11()
   //
-  //    val fraction1 = new objChapter11.Fraction(15, -6)
-  //    val fraction2 = new objChapter11.Fraction(2, 3)
+  //  val fraction1 = new objChapter11.Fraction(15, -6)
+  //  val fraction2 = new objChapter11.Fraction(2, 3)
   //
-  //    println(fraction1)
-  //    println(fraction1 + fraction2)
-  //    println(fraction1 - fraction2)
-  //    println(fraction1 * fraction2)
-  //    println(fraction1 / fraction2)
+  //  println(fraction1)
+  //  println(fraction1 + fraction2)
+  //  println(fraction1 - fraction2)
+  //  println(fraction1 * fraction2)
+  //  println(fraction1 / fraction2)
 
   val objChapter12 = new Chapter12()
   //  val result = objChapter12.exercise1(x => x * x, -5, 5)
@@ -192,16 +193,22 @@ object Program extends App {
   //
   //  pair.swap()
   //  println(pair.first + " " + pair.second)
-
   val objChapter19 = new Chapter19()
 
-  val bugsy = new objChapter19.Bug()
-  bugsy.move(4).show().move(6).show().turn().move(5).show()
-  println("\n"+bugsy.direction + " " + bugsy.position)
+  //  val bugsy = new objChapter19.Bug()
+  //  bugsy.move(4).show().move(6).show().turn().move(5).show()
+  //  println("\n" + bugsy.direction + " " + bugsy.position)
+  //
+  //  objChapter19.exercise8((x: Int) => x * x, 3, 6)
 
-  objChapter19.exercise8((x: Int) => x * x, 3, 6)
+  val objChapter20 = new Chapter20()
 
+  val parser = new objChapter20.exercise1()
 
+  val input = "1 + 2 * 3 - 4 % 7 /10"
+  val result = parser.parseAll(parser.expr, input)
+
+  println(result)
 
 }
 
@@ -908,10 +915,11 @@ class Chapter19 {
     }
 
     def show(): Bug = {
-      print(position+" ")
+      print(position + " ")
       this
     }
   }
+
   /**
    * Напишите функцию printValues с тремя параметрами: f, from
    * и to, выводящую все значения f, для входных значений в заданном диапазоне
@@ -922,6 +930,24 @@ class Chapter19 {
     for (i <- from to to) {
       print(f(i) + " ")
     }
-    println()
   }
+}
+
+class Chapter20 {
+  /**
+   * Добавьте в парсер арифметических выражений операции / и %.
+   */
+  class exercise1 extends StandardTokenParsers {
+    lexical.delimiters += ("+", "-", "*","/", "%", "(", ")")
+
+    def expr: Parser[Any] = term ~ rep(("+" | "-") ~ term)
+
+    def term: Parser[Any] = factor ~ rep(("*" | "/" | "%") ~> factor)
+
+    def factor: Parser[Any] = numericLit | "(" ~> expr <~ ")"
+
+    def parseAll[T](p: Parser[T], in: String): ParseResult[T] =
+      phrase(p)(new lexical.Scanner(in))
+  }
+
 }
