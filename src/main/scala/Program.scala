@@ -203,12 +203,21 @@ object Program extends App {
 
   val objChapter20 = new Chapter20()
 
-  val parser = new objChapter20.exercise1()
+  //  val parser = new objChapter20.exercise1()
+  //
+  //  val input = "1 + 2 * 3 - 4 % 7 /10"
+  //  val result = parser.parseAll(parser.expr, input)
+  //
+  //  println(result)
 
-  val input = "1 + 2 * 3 - 4 % 7 /10"
-  val result = parser.parseAll(parser.expr, input)
+  //  упражнение 2 глава 21
 
+  val result = 120 +% 10
   println(result)
+
+  //  упражнение 3 глава 21
+  val result2 = 5 ! 10
+  println(result2)
 
 }
 
@@ -938,7 +947,7 @@ class Chapter20 {
    * Добавьте в парсер арифметических выражений операции / и %.
    */
   class exercise1 extends StandardTokenParsers {
-    lexical.delimiters += ("+", "-", "*","/", "%", "(", ")")
+    lexical.delimiters += ("+", "-", "*", "/", "%", "(", ")")
 
     def expr: Parser[Any] = term ~ rep(("+" | "-") ~ term)
 
@@ -949,5 +958,31 @@ class Chapter20 {
     def parseAll[T](p: Parser[T], in: String): ParseResult[T] =
       phrase(p)(new lexical.Scanner(in))
   }
+}
 
+/**
+ * Определите оператор +%, добавляющий указанный процент к значению.
+ * Например, выражение 120 +% 10 должно вернуть 132. Используйте неявный класс.
+ */
+
+class Percent(val value: Double) extends AnyVal {
+  def +%(percent: Double): Double = value * (1 + percent / 100)
+}
+
+implicit class PercentOps(value: Double) {
+  def +%(percent: Double): Double = new Percent(value) +% percent
+}
+
+class Factorial(val value: Double) extends AnyVal {
+  def !(percent: Double): Int = {
+    var result = 1
+    for(i<-1 to  value.toInt){
+      result= result *i
+    }
+    result
+  }
+}
+
+implicit class FactorialOps(value: Double) {
+  def !(factorial: Double): Int = new Factorial(value) ! factorial
 }
