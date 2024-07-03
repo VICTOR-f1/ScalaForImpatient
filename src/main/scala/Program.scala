@@ -211,7 +211,6 @@ object Program extends App {
   //  println(result)
 
   //  упражнение 2 глава 21
-
   val result = 120 +% 10
   println(result)
 
