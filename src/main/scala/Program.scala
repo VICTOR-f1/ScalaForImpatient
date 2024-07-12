@@ -7,12 +7,18 @@ import scala.math.{abs, sqrt}
 import scala.util.Sorting.quickSort
 import scala.io.Source
 import MyPackeges.Random
+import Program.objChapter2
 import com.sun.jndi.url.rmi.rmiURLContext.Parser
+
+import java.awt.datatransfer.{DataFlavor, SystemFlavorMap}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.sys.process.*
 import java.nio.file.{Files, Paths}
+import java.time.LocalDate
+import java.util.TimeZone
 import scala.::
 import scala.concurrent.Future
+import scala.jdk.CollectionConverters
 import scala.util.Success
 import scala.util.parsing.combinator.syntactical.StandardTokenParsers
 
@@ -26,12 +32,26 @@ object Program extends App {
   //  objChapter2.exercise4()
   //  objChapter2.exercise5(4)
   //  objChapter2.exercise6("Unicode")
+  //  objChapter2.exercise7("Unicode")
+  //  val result = objChapter2.exercise8("Unicode")
+  //  println(result)
+
+  //  упражнение 11 глава 2
+  //  val year = 2023
+  //  val month = 5
+  //  val day = 11
+  //  val date2 = date"$year-$month-$day"
+  //  println(s"Дата: $date2")
 
   val objChapter3 = new Chapter3()
   //  objChapter3.exercise1(10)
   //  objChapter3.exercise2(Array(1, 2, 3, 4, 5))
   //  objChapter3.exercise3(Array(2, 1, 4, 3, 5))
   //  objChapter3.exercise4(Array(0, 1, 0, -3, 5))
+  //  objChapter3.exercise8()
+  //  objChapter3.exercise9()
+  //  objChapter3.exercise10()
+  //  objChapter3.exercise11()
 
   val objChapter4 = new Chapter4()
   //  objChapter4.exercise2()
@@ -210,13 +230,13 @@ object Program extends App {
   //
   //  println(result)
 
-  //  упражнение 2 глава 21
-  val result = 120 +% 10
-  println(result)
-
-  //  упражнение 3 глава 21
-  val result2 = 5 ! 10
-  println(result2)
+  //  //  упражнение 2 глава 21
+  //  val result = 120 +% 10
+  //  println(result)
+  //
+  //  //  упражнение 3 глава 21
+  //  val result2 = 5 ! 10
+  //  println(result2)
 
 }
 
@@ -274,11 +294,42 @@ class Chapter2 {
    * букв в строке. Например, произведение символов в строке "Hello" равно 9415087488L.
    */
   def exercise6(str: String): Unit = {
-    var result: Long = 1
+    var result: Int = 1
     for (ch <- str) {
       result *= ch.toInt
     }
     println(result)
+  }
+
+  /**
+   * Решите предыдущее упражнение без применения цикла.
+   */
+  def exercise7(str: String): Unit = {
+    val result = str.toSeq.map(_.toInt).product
+    println(result)
+  }
+
+  /**
+   * Сделайте функцию из предыдущего упражнения рекурсивной
+   */
+  def exercise8(str: String): Int = {
+    if (str.isEmpty) 1
+    else str.head.toInt + exercise8(str.tail)
+  }
+}
+
+/**
+ * Упражение 11 глава 2
+ * Определите интерполятор строк date, чтобы значение типа
+ * java.time.LocalDate можно было определить как date"$year$month-$day". Для этого вам потребуется определить «неявный»
+ * класс с методом date, например:
+ * implicit class DateInterpolator(val sc: StringContext) extends AnyVal {
+ * def date(args: Any*): LocalDate = . . .
+ * }
+ */
+implicit class DateInterpolator(val sc: StringContext) extends AnyVal {
+  def date(args: Int*) = {
+    LocalDate.of(args(0), args(1), args(2))
   }
 }
 
@@ -351,6 +402,77 @@ class Chapter3 {
     }
     println(result.mkString(" "))
   }
+
+
+  /**
+   * Перепишите решение на языке Scala, сначала собрав все позиции отрицательных
+   * элементов, затем перевернув последовательность и вызвав
+   * a.remove(i) для каждого индекса.
+   */
+  def exercise8(): Unit = {
+    var a = ArrayBuffer(1, -2, 3, -4, 5, -6, 7, 8)
+    val indexKeep = ArrayBuffer[Int]()
+    var first = true
+    for (i <- a.indices) {
+      if (!first && a(i) < 0) {
+        indexKeep += i
+      }
+      if (first && a(i) < 0) {
+        first = false
+      }
+    }
+    for (i <- indexKeep.indices.reverse) a.remove(indexKeep(i))
+
+    println(a.mkString(" "))
+  }
+
+  /**
+   * Улучшите решение из предыдущего упражнения. Соберите индексы элементов,
+   * подлежащих перемещению и позиции, куда они должны быть помещены.
+   * Переместите их и укоротите буфер. Не копируйте элементов, находящихся перед первым
+   * нежелательным элементом.
+   */
+  def exercise9(): Unit = {
+    var a = ArrayBuffer(1, -2, 4, -6, 7, -8, 9)
+    var first = true
+    val positionKeep = for (i <- a.indices if a(i) >= 0 || first) yield {
+      if (first && a(i) < 0) {
+        first = false
+      }
+      a(i)
+    }
+    for (i <- positionKeep.indices) {
+      a(i) = positionKeep(i)
+    }
+    a.trimEnd(a.length - positionKeep.length)
+    println(a.mkString(" "))
+  }
+
+  /**
+   * Создайте коллекцию всех часовых поясов, возвращаемых методом java.util.TimeZone.getAvailableIDs
+   * для Америки. Отбросьте префикс "America/" и отсортируйте результат
+   */
+  def exercise10(): Unit = {
+    val id = "America/"
+    //обрезка префикска
+    val a = TimeZone.getAvailableIDs.filter(_.startsWith(id)).map(_.stripPrefix(id))
+    a.foreach(println)
+  }
+
+  /**
+   * Импортируйте java.awt.datatransfer._ и создайте объект типа SystemFlavorMap вызовом
+   * val flavors = SystemFlavorMap.getDefaultFlavorMap(). asInstanceOf[SystemFlavorMap]
+   * Затем вызовите метод getNativesForFlavor с параметром DataFlavor.imageFlavor
+   * и получите возвращаемое значение как буфер Scala.
+   */
+  def exercise11(): Unit = {
+    //Получает  SystemFlavorMap  -  это объект, содержащий информацию о доступных типах данных (flavours) для передачи данных в Java.
+    val flavors = SystemFlavorMap.getDefaultFlavorMap.asInstanceOf[SystemFlavorMap]
+    val flavorBuffer = CollectionConverters.CollectionHasAsScala(flavors.getNativesForFlavor(DataFlavor.stringFlavor)).asScala
+
+    flavorBuffer.foreach(println)
+  }
+
 }
 
 class Chapter4 {
@@ -975,8 +1097,8 @@ implicit class PercentOps(value: Double) {
 class Factorial(val value: Double) extends AnyVal {
   def !(percent: Double): Int = {
     var result = 1
-    for(i<-1 to  value.toInt){
-      result= result *i
+    for (i <- 1 to value.toInt) {
+      result = result * i
     }
     result
   }
